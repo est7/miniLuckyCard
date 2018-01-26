@@ -1,5 +1,25 @@
-node_modules
-dist
 .DB_store
 *.wpy___jb_tmp___
+
+assets/*
+!assets/.gitignore
+runtime/*
+!runtime/.gitignore
+web/assets/*
+tests/
+.settings/
+.buildpath
+.project
+.idea
+node_modules
+test.js
+npm-debug.log
+dist
+
+# idea ignore
 .idea/
+*.ipr
+*.iml
+*.iws
+
+*.wepycache
