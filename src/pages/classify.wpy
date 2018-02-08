@@ -18,24 +18,21 @@
 
   .name {
     text-align: center;
-    height: 100 rpx;
-    line-height: 100 rpx;
-    font-size: 28 rpx;
+    height: 100rpx;
+    line-height: 100rpx;
+    font-size: 28rpx;
     color: #666;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
   }
-
   .active {
-    border-left: 6 rpx solid #ff3218;
+    border-left: 6rpx solid #ff3218;
     background: #fff;
     color: #ff3218;
   }
+  .cateChildren{
 
-  .cateChildren {
-    width: 20%;
-    height: 20%;
   }
 </style>
 
@@ -46,8 +43,7 @@
   <view class="classify">
     <scroll-view class="classify_catetory" scroll-y scroll-with-animation>
 
-      <view class="name {{item.active? 'active':''}}" data-id="{{item.id}}"
-            wx:for="{{rootcateList}}" @tap="changeCate">
+      <view class="name {{item.active? 'active':''}}"  data-id="{{item.id}}" wx:for="{{rootcateList}}" @tap="changeCate">
         {{item.name}}
       </view>
 
@@ -55,14 +51,8 @@
 
     <scroll-view class="classify_detail" scroll-y scroll-with-animation>
 
-      <view wx:for="{{childcateList}}">
-        <navigator class="cateChildren" url="/pages/search?parentId={{item.id}}&&position={{2}}">
-
-          <image class="imgChild" src="{{item.image_url}}"></image>
-
-          <image class="nameChild" mode="aspectFit" src="{{item.name}}"></image>
-
-        </navigator>
+      <view wx:for="{{childcateList}}" >
+       <view></view>
       </view>
 
 
