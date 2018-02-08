@@ -1,5 +1,12 @@
 <style lang="less">
   /** less **/
+  .container {
+    height: 100%;
+    width: 100%;
+    background: #fff;
+  }
+
+
   .classify {
     display: flex;
     flex-direction: row;
@@ -8,12 +15,14 @@
     background: #fff;
   }
 
+
   .classify_catetory {
     width: 25%;;
   }
 
   .classify_detail {
     width: 75%;
+
   }
 
   .name {
@@ -32,12 +41,30 @@
     color: #ff3218;
   }
   .cateChildren{
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .children_item {
+    padding-top: 20rpx;
+    height: 200rpx;
+    text-align: center;
+  }
+
+  .child_image{
+    width: 60px;
+    height: 60px;
+  }
+
+  .child_name{
 
   }
+
+
 </style>
 
 
 <template>
+<view class="container">
   <searchBar/>
 
   <view class="classify">
@@ -51,16 +78,21 @@
 
     <scroll-view class="classify_detail" scroll-y scroll-with-animation>
 
-      <view wx:for="{{childcateList}}" >
-       <view></view>
-      </view>
+      <view class="cateChildren">
+      <view  wx:for="{{childcateList}}" >
+        <view class="children_item">
+          <image class="child_image" src="{{item.image_url}}"></image>
+          <view class="child_name">{{item.name}}</view>
+        </view>
 
+      </view>
+      </view>
 
     </scroll-view>
 
 
   </view>
-
+</view>
 </template>
 
 
