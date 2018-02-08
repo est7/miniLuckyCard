@@ -1,0 +1,61 @@
+<style type="less">
+  .search_read_only {
+    align-items: center;
+    display: flex;
+    margin: 0 auto;
+    width: 100%;
+    .search_content {
+      display: flex;
+      align-items: center;
+      border-radius: 12rpx;
+      color: #999;
+      width: 90%;
+      background: #efefef;
+      padding: 0 30rpx;
+      height: 55rpx;
+      margin: 0 auto;
+      .search_input {
+        text-align: center;
+        align-self: center;
+        font-size: 26rpx;
+        width: 100%;
+      }
+    }
+    .icon-search {
+      font-size: 40rpx;
+    }
+    .icon-message {
+      font-size: 50rpx;
+    }
+  }
+
+  .top_search {
+    padding: 4rpx 0rpx;
+    background: #fff;
+  }
+
+
+</style>
+
+<template>
+  <view class="top_search">
+    <view class="search_read_only">
+      <navigator class="search_content" url="/pages/search">
+        <i class="iconfont icon-search"></i>
+        <view class="search_input">搜索商品</view>
+      </navigator>
+    </view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+
+  export default class SearchBar extends wepy.component {
+    props = {
+    }
+    methods = {
+      tap () {
+      }
+    }
+  }
+</script>

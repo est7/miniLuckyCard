@@ -1,69 +1,134 @@
 <style lang="less">
-.container {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  box-sizing: border-box;
-}
+  @import "./styles/base";
+  @import "./styles/icon";
+  @import "./styles/style";
 </style>
 
 <script>
-import wepy from 'wepy'
-import 'wepy-async-function'
+  /* eslint-disable no-trailing-spaces */
 
-export default class extends wepy.app {
-  config = {
-    pages: [
-      'pages/index'
-    ],
-    window: {
-      backgroundTextStyle: 'light',
-      navigationBarBackgroundColor: '#fff',
-      navigationBarTitleText: 'WeChat',
-      navigationBarTextStyle: 'black'
+  import wepy from 'wepy'
+  import 'wepy-async-function'
+  import {
+    USER_SPECICAL_INFO,
+    USER_INFO,
+    SYSTEM_INFO,
+    ADDRESS_ID,
+    SEL_CLASS_CODE
+  } from './utils/constant'
+
+  import util from './util'
+  import md5 from './md5'
+
+  const API_SECRET_KEY = 'lucky_card'
+  const TIMESTAMP = util.getCurrentTime()
+  const SIGN = md5.hex_md5((TIMESTAMP + API_SECRET_KEY).toLowerCase())
+
+  export default class App extends wepy.app {
+
+    constructor () {
+      super()
+      this.use('requestfix')
+      this.use('promisify')
+      // 拦截request请求
+      this.intercept('request', {
+        // 发出请求时的回调函数
+        config (p) {
+          // 对所有request请求中的OBJECT参数对象统一附加时间戳属性
+          // p.sign = SIGN
+          // p.time = TIMESTAMP
+          console.log('config request: ', p)
+          // 必须返回OBJECT参数对象，否则无法发送请求到服务端
+          return p
+        },
+
+        // 请求成功后的回调函数
+        success (p) {
+          // 可以在这里对收到的响应数据对象进行加工处理
+          console.log('request success: ', p)
+          // 必须返回响应数据对象，否则后续无法对响应数据进行处理
+          return p
+        },
+
+        // 请求失败后的回调函数
+        fail (p) {
+          console.log('request fail: ', p)
+          // 必须返回响应数据对象，否则后续无法对响应数据进行处理
+          return p
+        },
+
+        // 请求完成时的回调函数(请求成功或失败都会被执行)
+        complete (p) {
+          console.log('request complete: ', p)
+        }
+      })
     }
-  }
 
-  globalData = {
-    userInfo: null
-  }
-
-  constructor () {
-    super()
-    this.use('requestfix')
-    this.use('promisify')
-  }
-
-  onLaunch() {
-    this.testAsync()
-  }
-
-  sleep (s) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve('promise resolved')
-      }, s * 1000)
-    })
-  }
-
-  async testAsync () {
-    const data = await this.sleep(3)
-    console.log(data)
-  }
-
-  getUserInfo(cb) {
-    const that = this
-    if (this.globalData.userInfo) {
-      return this.globalData.userInfo
-    }
-    wepy.getUserInfo({
-      success (res) {
-        that.globalData.userInfo = res.userInfo
-        cb && cb(res.userInfo)
+    config = {
+      pages: [
+        'pages/home',
+        'pages/shopCart',
+        'pages/classify',
+        'pages/info',
+        'pages/goodsDetail',
+        'pages/search'
+      ],
+      window: {
+        backgroundTextStyle: 'light',
+        navigationBarBackgroundColor: '#fff',
+        navigationBarTitleText: 'WeChat',
+        navigationBarTextStyle: 'black',
+        enablePullDownRefresh: false,
+        backgroundColor: '#fff'
+      },
+      tabBar: {
+        'color': '#999999',
+        'selectedColor': '#ff6a3c',
+        'backgroundColor': '#ffffff',
+        'borderStyle': 'black',
+        'list': [{
+          'pagePath': 'pages/home',
+          'text': '首页',
+          'iconPath': 'images/icon_home.png',
+          'selectedIconPath': 'images/icon_home_active.png'
+        }, {
+          'pagePath': 'pages/classify',
+          'text': '分类',
+          'iconPath': 'images/icon_classify.png',
+          'selectedIconPath': 'images/icon_classify_active.png'
+        }, {
+          'pagePath': 'pages/shopCart',
+          'text': '购物车',
+          'iconPath': 'images/icon_shop_cart.png',
+          'selectedIconPath': 'images/icon_shop_cart_active.png'
+        }, {
+          'pagePath': 'pages/info',
+          'text': '我',
+          'iconPath': 'images/icon_info.png',
+          'selectedIconPath': 'images/icon_info_active.png'
+        }]
       }
-    })
+
+    }
+
+    globalData = {
+      userInfo: null
+    }
+
+    onLaunch () {
+    }
+
+    getUserInfo (cb) {
+      const that = this
+      if (this.globalData.userInfo) {
+        return this.globalData.userInfo
+      }
+      wepy.getUserInfo({
+        success (res) {
+          that.globalData.userInfo = res.userInfo
+          cb && cb(res.userInfo)
+        }
+      })
+    }
   }
-}
 </script>

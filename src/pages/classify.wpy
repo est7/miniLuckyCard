@@ -1,0 +1,165 @@
+<style lang="less">
+  /** less **/
+  .classify {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    width: 100%;
+    background: #fff;
+  }
+
+  .classify_catetory {
+    width: 25%;;
+  }
+
+  .classify_detail {
+    width: 75%;
+  }
+
+  .name {
+    text-align: center;
+    height: 100 rpx;
+    line-height: 100 rpx;
+    font-size: 28 rpx;
+    color: #666;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .active {
+    border-left: 6 rpx solid #ff3218;
+    background: #fff;
+    color: #ff3218;
+  }
+
+  .cateChildren {
+    width: 20%;
+    height: 20%;
+  }
+</style>
+
+
+<template>
+  <searchBar/>
+
+  <view class="classify">
+    <scroll-view class="classify_catetory" scroll-y scroll-with-animation>
+
+      <view class="name {{item.active? 'active':''}}" data-id="{{item.id}}"
+            wx:for="{{rootcateList}}" @tap="changeCate">
+        {{item.name}}
+      </view>
+
+    </scroll-view>
+
+    <scroll-view class="classify_detail" scroll-y scroll-with-animation>
+
+      <view wx:for="{{childcateList}}">
+        <navigator class="cateChildren" url="/pages/search?parentId={{item.id}}&&position={{2}}">
+
+          <image class="imgChild" src="{{item.image_url}}"></image>
+
+          <image class="nameChild" mode="aspectFit" src="{{item.name}}"></image>
+
+        </navigator>
+      </view>
+
+
+    </scroll-view>
+
+
+  </view>
+
+</template>
+
+
+<script>
+  /* eslint-disable no-multiple-empty-lines,no-trailing-spaces,padded-blocks */
+
+  import wepy from 'wepy'
+  import api from '../api/api'
+  import tip from '../utils/tip'
+  import {
+    SEL_CLASS_CODE
+  } from '../utils/constant'
+
+  import SearchBar from '../components/SearchBar'
+
+  export default class Classify extends wepy.page {
+    config = {
+      navigationBarTitleText: '分类'
+    }
+    components = {
+      searchBar: SearchBar
+    }
+    data = {
+      // 一级分类数据
+      rootcateList: {},
+      // 二级分类数据
+      childcateList: {}
+    }
+    methods = {
+      changeCate (e) {
+        let id = e.currentTarget.dataset.id
+        this.getChildCate(id)
+        wepy.setStorageSync(SEL_CLASS_CODE, id)
+        // 设置一级分类的选中状态
+        for (var i = 0; i < this.rootcateList.length; i++) {
+          var rootCate = this.rootcateList[i]
+          rootCate.active = false
+          if (rootCate.id === id) {
+            rootCate.active = true
+          }
+        }
+
+      }
+    }
+    events = {}
+
+    onLoad () {
+      this.getRootCateTopLevel()
+    }
+
+    async getRootCateTopLevel () {
+      const json = await api.getRootCtegoryList({
+        parent_id: 0, position: 1
+      })
+      if (json.data.code === 0) {
+        this.rootcateList = json.data.list
+        if (this.rootcateList.length > 0) {
+          let selCode = wx.getStorageSync(SEL_CLASS_CODE)
+          var selRottCateCode = this.rootcateList[0].id
+          if (selCode.length === 0) {
+            this.rootcateList[0].active = true
+          } else {
+            for (var i = 0; i < this.rootcateList.length; i++) {
+              if (selCode === this.rootcateList[i].id) {
+                selRottCateCode = this.rootcateList[i].id
+                this.rootcateList[i].active = true
+              }
+            }
+          }
+          this.getChildCate(selRottCateCode)
+        }
+      } else {
+        tip.error(json.data.msg)
+      }
+      this.$apply()
+    }
+
+    async getChildCate (parentId) {
+      const json = await api.getChildGoodsCatetoryList({
+        parent_id: parentId, position: 1
+      })
+      if (json.data.code === 0) {
+        this.childcateList = json.data.list
+      } else {
+        tip.error(json.data.msg)
+      }
+      this.$apply()
+
+    }
+
+  }
+</script>

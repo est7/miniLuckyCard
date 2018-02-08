@@ -1,0 +1,124 @@
+<template>
+  <view class="swiper-tab">
+    <view class="swiper-tab-list {{currentTab==0 ? 'on' : ''}}" data-current="0" @tap="swichNav">1
+    </view>
+    <view class="swiper-tab-list {{currentTab==1 ? 'on' : ''}}" data-current="1" @tap="swichNav">2
+    </view>
+    <view class="swiper-tab-list {{currentTab==2 ? 'on' : ''}}" data-current="2" @tap="swichNav">3
+    </view>
+    <view class="swiper-tab-list {{currentTab==3 ? 'on' : ''}}" data-current="3" @tap="swichNav">4
+    </view>
+  </view>
+
+
+  <swiper current="{{currentTab}}" @change="bindChange" class="wx-swiper" >
+    <swiper-item>
+      <image class="wx-image" mode="aspectFill"
+             src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1493698928333&di=99be91f1067ce820af8235607706813a&imgtype=0&src=http%3A%2F%2Fimg.tupianzj.com%2Fuploads%2Fallimg%2F160412%2F9-160412091538.jpg"
+      />
+    </swiper-item>
+    <swiper-item>
+      <image class="wx-image" mode="aspectFill"
+             src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1493698928333&di=ae56672831512cc7d4cd1e26d31269aa&imgtype=0&src=http%3A%2F%2Fimg.tupianzj.com%2Fuploads%2Fallimg%2F160412%2F9-160412091540.jpg"
+      />
+    </swiper-item>
+    <swiper-item>
+      <image class="wx-image" mode="aspectFill"
+             src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1493698928333&di=ae56672831512cc7d4cd1e26d31269aa&imgtype=0&src=http%3A%2F%2Fimg.tupianzj.com%2Fuploads%2Fallimg%2F160412%2F9-160412091540.jpg"
+      />
+    </swiper-item>
+    <swiper-item>
+      <image class="wx-image" mode="aspectFill"
+             src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1493698928333&di=ae56672831512cc7d4cd1e26d31269aa&imgtype=0&src=http%3A%2F%2Fimg.tupianzj.com%2Fuploads%2Fallimg%2F160412%2F9-160412091540.jpg"
+      />
+    </swiper-item>
+  </swiper>
+
+
+</template>
+
+
+<script>
+  import wepy from 'wepy'
+  import api from '../api/api'
+  import tip from '../utils/tip'
+  import {
+    SEL_CLASS_CODE
+  } from '../utils/constant'
+
+  export default class Home extends wepy.page {
+    config = {
+      navigationBarTitleText: '分类'
+    }
+    components = {}
+    data = {currentTab: 0}
+    methods = {
+      swichNav (e) {
+        if (this.currentTab === e.target.dataset.current) {
+          return false
+        } else {
+          this.currentTab = e.target.dataset.current
+          this.$apply()
+        }
+      },
+      bindChange (e) {
+        this.currentTab = e.detail.current
+        this.$apply()
+      }
+    }
+    events = {}
+
+    onLoad () {}
+
+    async getRootCateTopLevel () {
+      const json = await api.rootCtegoryList({
+        query: {}
+      })
+      if (json.data.code == 0) {
+        this.rootcateList = json.data.list
+        if (this.rootcateList.length > 0) {
+          let selCode = wx.getStorageSync(SEL_CLASS_CODE)
+          var selRottCateCode = this.rootcateList[0].code
+          if (selCode.length === 0) {
+            this.rootcateList[0].active = true
+          } else {
+            for (var i = 0; i < this.rootcateList.length; i++) {
+              if (selCode == this.rootcateList[i].code) {
+                selRottCateCode = this.rootcateList[i].code
+                this.rootcateList[i].active = true
+              }
+            }
+          }
+
+          this.getChildCate(selRottCateCode)
+        }
+      } else {
+        tip.error(json.data.msg)
+      }
+      this.$apply()
+    }
+  }
+</script>
+
+<style lang="less">
+  /** less **/
+  .wx-swiper{height: 750rpx; }
+  .wx-image{width: 100%; height: 100%; }
+  .swiper-tab {
+    width: 100%;
+    border-bottom: 2rpx solid gainsboro;
+    text-align: center;
+    line-height:80rpx;
+  }
+  .swiper-tab-list {
+    font-size: 30 rpx;
+    display: inline-block;
+    width: 20%;
+    color: #777;
+  }
+  .on {
+    color: #7cba23;
+    border-bottom: 5 rpx solid #7cba23;
+  }
+
+</style>

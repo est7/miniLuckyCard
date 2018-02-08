@@ -1,0 +1,27 @@
+<template>
+ <view>搜索界面</view>
+
+</template>
+
+
+<script>
+  import wepy from 'wepy'
+  export default class Search extends wepy.page {
+    config = {
+      navigationBarTitleText: '搜索'
+    }
+    components = {
+    }
+    data = {currentTab: 0}
+    methods = {
+    }
+    events = {}
+
+    onLoad () {}
+
+  }
+</script>
+
+<style lang="less">
+  /** less **/
+</style>
