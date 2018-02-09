@@ -71,7 +71,8 @@
         'pages/classify',
         'pages/info',
         'pages/goodsDetail',
-        'pages/search'
+        'pages/search',
+        'pages/subClassify'
       ],
       window: {
         backgroundTextStyle: 'light',
@@ -112,10 +113,14 @@
     }
 
     globalData = {
+      systemInfo: null,
       userInfo: null
     }
 
-    onLaunch () {
+    async onLaunch () {
+      let systemInfo = wepy.getSystemInfoSync()
+      this.systemInfo = systemInfo
+      wepy.setStorageSync(SYSTEM_INFO, systemInfo)
     }
 
     getUserInfo (cb) {

@@ -1,14 +1,18 @@
 <style lang="less">
   /** less **/
-  .container {
+  page{
     height: 100%;
+  }
+  .container {
     width: 100%;
+    height: 100%;
     background: #fff;
   }
 
 
   .classify {
     display: flex;
+    flex:1;
     flex-direction: row;
     height: 100%;
     width: 100%;
@@ -47,6 +51,7 @@
   .children_item {
     padding-top: 20rpx;
     height: 200rpx;
+    width: 750*0.75/3rpx;
     text-align: center;
   }
 
@@ -56,15 +61,25 @@
   }
 
   .child_name{
-
   }
 
+  .banner_image {
+    width: 750*0.75rpx;
+    height: 200rpx;
+  }
+
+  swiper{
+    display: block;
+    height: 200rpx;
+    width: 750*0.75rpx;
+
+  }
 
 </style>
 
 
 <template>
-<view class="container">
+
   <searchBar/>
 
   <view class="classify">
@@ -77,22 +92,30 @@
     </scroll-view>
 
     <scroll-view class="classify_detail" scroll-y scroll-with-animation>
+      <view wx:if="{{childbannerList.length > 0}}">
+      <swiper autoplay>
+        <view wx:for="{{childbannerList}}">
+          <swiper-item>
+          <navigator class="children_item" url="/pages/subClassify?parentId={{item.id}}&postion={{iteme.clas}}">
+            <image class="banner_image" mode="aspectFit" src="{{item.image_url}}"></image>
 
+          </navigator>
+          </swiper-item>
+        </view>
+      </swiper>
+      </view>
       <view class="cateChildren">
       <view  wx:for="{{childcateList}}" >
-        <view class="children_item">
+        <navigator class="children_item" url="/pages/subClassify?parentId={{item.id}}&postion={{iteme.clas}}">
           <image class="child_image" src="{{item.image_url}}"></image>
           <view class="child_name">{{item.name}}</view>
-        </view>
+        </navigator>
 
       </view>
       </view>
 
     </scroll-view>
-
-
   </view>
-</view>
 </template>
 
 
@@ -119,7 +142,9 @@
       // 一级分类数据
       rootcateList: {},
       // 二级分类数据
-      childcateList: {}
+      childcateList: {},
+      // 二级分类banner
+      childbannerList:{}
     }
     methods = {
       changeCate (e) {
@@ -176,6 +201,7 @@
       })
       if (json.data.code === 0) {
         this.childcateList = json.data.list
+        this.childbannerList = json.data.banner
       } else {
         tip.error(json.data.msg)
       }

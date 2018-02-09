@@ -32,4 +32,4 @@ export const SEL_CLASS_CODE = 'selClassCode'
  * 测试服/正式服
  * @type {String}
  */
-export const BUILD_TYPE = 'production'
+export const BUILD_TYPE = 'production11'
