@@ -21,13 +21,38 @@
 
   export default class subClassify extends wepy.page {
     config = {
-      navigationBarTitleText: '分类'
+      enablePullDownRefresh: true
     }
     components = {}
-    data = {}
+    data = {
+      subCateDetailList: []
+    }
     methods = {}
     events = {}
-    onLoad () {}
+
+    onLoad (option) {
+      wx.setNavigationBarTitle({
+        title: option.title
+      })
+      this.getSubCateDetail(option.classify_id, option.classify_type, option.level)
+    }
+
+    async getSubCateDetail (id, type, level) {
+      const json = await api.getSubCatetoryDetailList({
+        classify_id: id,
+        classify_type: type,
+        level: level,
+        start: 0,
+        size: 10
+      })
+
+      if (json.data.code === 0) {
+        this.subCateDetailList = json.data.list
+        if (this.subCateDetailList.length > 0) {
+
+        }
+      }
+    }
 
   }
 </script>

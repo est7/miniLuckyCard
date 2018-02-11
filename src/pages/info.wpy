@@ -1,9 +1,12 @@
 <script>
   import wepy from 'wepy'
+  import LoadMore from '../components/LoadMore'
 
   export default class Info extends wepy.page {
     config = {};
-    components = {};
+    components = {
+      LoadMore: LoadMore
+    };
     data = {};
     methods = {};
     events = {};
@@ -11,8 +14,11 @@
   }
 </script>
 
-<template lang="wxml">
+<template>
   <view>fasdf</view>
+  <LoadMore loading="true"></LoadMore>
+  <LoadMore nodata="true"></LoadMore>
+  <LoadMore nomore="true"></LoadMore>
 </template>
 
 <style lang="less">

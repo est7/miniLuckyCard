@@ -96,7 +96,7 @@
       <swiper autoplay>
         <view wx:for="{{childbannerList}}">
           <swiper-item>
-          <navigator class="children_item" url="/pages/subClassify?parentId={{item.id}}&postion={{iteme.clas}}">
+          <navigator class="children_item" url="/pages/subClassify">
             <image class="banner_image" mode="aspectFit" src="{{item.image_url}}"></image>
 
           </navigator>
@@ -106,7 +106,7 @@
       </view>
       <view class="cateChildren">
       <view  wx:for="{{childcateList}}" >
-        <navigator class="children_item" url="/pages/subClassify?parentId={{item.id}}&postion={{iteme.clas}}">
+        <navigator class="children_item" url="/pages/subClassify?classify_id={{item.id}}&classify_type={{item.type}}&level={{item.level}}&title={{item.name}}">
           <image class="child_image" src="{{item.image_url}}"></image>
           <view class="child_name">{{item.name}}</view>
         </navigator>

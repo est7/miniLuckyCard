@@ -1,0 +1,32 @@
+<style type="less">
+  .container {
+    width: 375rpx;
+    height: rpx;
+
+  }
+
+
+</style>
+
+<template>
+  <view class="container">
+    <view class="search_read_only">
+      <navigator class="search_content" url="/pages/search">
+        <i class="iconfont icon-search"></i>
+        <view class="search_input">搜索商品</view>
+      </navigator>
+    </view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+
+  export default class SearchBar extends wepy.component {
+    props = {
+    }
+    methods = {
+      tap () {
+      }
+    }
+  }
+</script>

@@ -1,23 +1,29 @@
 <script>
   import wepy from 'wepy'
+  import LoadMore from '../components/LoadMore'
 
   export default class GoodsDetail extends wepy.page {
-    config = {};
-    components = {};
-    data = {};
-    methods = {};
-    events = {};
-    onLoad() {};
+    config = {}
+    components = {
+      LoadMore: LoadMore,
+      LoadMore1: LoadMore,
+      LoadMore2: LoadMore
+    }
+    data = {
+      loading: true,
+      nodata: true
+    }
+    methods = {}
+    events = {}
+
+    onLoad () {};
   }
 </script>
 
-<template lang="wxml">
-   <view class="list_item">
-        <view class="title">详细地址:</view>
-        <view class="input">
-          <input type="text" name="addressDetail">
-        </view>
-      </view>
+<template>
+  <LoadMore :loading="loading" > </LoadMore>
+  <LoadMore1 :nodata="nodata" nodata_str="暂无数据 Wepy"></LoadMore1>
+  <LoadMore2 :nomore="nodata" ></LoadMore2>
 </template>
 
 <style lang="less">
